@@ -1,18 +1,19 @@
 package git
 
 import (
-	"fmt"
 	"os"
 	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/user/wakatime-profile-stats/internal/errors"
 	"go.uber.org/zap"
 )
 
 const (
 	startMarker = "<!--START_SECTION:waka-->"
 	endMarker   = "<!--END_SECTION:waka-->"
+	filePerm    = 0600
 )
 
 const (
@@ -27,7 +28,7 @@ type Git struct {
 func SetupRepo(repoPath string) (*Git, error) {
 	if _, err := os.Stat(localRepoPath); err == nil {
 		if err := os.RemoveAll(localRepoPath); err != nil {
-			return nil, fmt.Errorf("removing repo: %w", err)
+			return nil, err
 		}
 	}
 
@@ -48,12 +49,12 @@ func SetupRepo(repoPath string) (*Git, error) {
 
 func (g *Git) UpdateStats(stats string) error {
 	if !g.setup {
-		return fmt.Errorf("repo not setup")
+		return errors.ErrRepoNotSetup
 	}
 
 	readmeBytes, err := os.ReadFile(localRepoPath + "/README.md")
 	if err != nil {
-		return fmt.Errorf("reading readme file: %w", err)
+		return err
 	}
 
 	startIndex := -1
@@ -67,13 +68,13 @@ func (g *Git) UpdateStats(stats string) error {
 	}
 
 	if startIndex == -1 || endIndex == -1 {
-		return fmt.Errorf("could not find markers in README")
+		return errors.ErrTagNotFound
 	}
 
 	newReadme := readme[:startIndex+len(startMarker)] + "\n" + stats + "\n" + readme[endIndex:]
 
-	if err := os.WriteFile(localRepoPath+"/README.md", []byte(newReadme), 0644); err != nil {
-		return fmt.Errorf("writing readme file: %w", err)
+	if err := os.WriteFile(localRepoPath+"/README.md", []byte(newReadme), filePerm); err != nil {
+		return err
 	}
 
 	zap.L().Info("Updated README.md")
@@ -83,16 +84,16 @@ func (g *Git) UpdateStats(stats string) error {
 
 func (g *Git) CommitAndPush() error {
 	if !g.setup {
-		return fmt.Errorf("repo not setup")
+		return errors.ErrRepoNotSetup
 	}
 
 	wt, err := g.gitRepo.Worktree()
 	if err != nil {
-		return fmt.Errorf("getting worktree: %w", err)
+		return err
 	}
 
 	if _, err := wt.Add("README.md"); err != nil {
-		return fmt.Errorf("adding file to worktree: %w", err)
+		return err
 	}
 
 	botSignature := &object.Signature{
@@ -107,12 +108,12 @@ func (g *Git) CommitAndPush() error {
 		Committer: botSignature,
 	})
 	if err != nil {
-		return fmt.Errorf("committing changes: %w", err)
+		return err
 	}
 
 	// push the changes
 	if err := g.gitRepo.Push(&git.PushOptions{}); err != nil {
-		return fmt.Errorf("pushing changes: %w", err)
+		return err
 	}
 
 	zap.L().Info("Committed and pushed changes")

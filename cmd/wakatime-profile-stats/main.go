@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/user/wakatime-profile-stats/internal/errors"
 	"github.com/user/wakatime-profile-stats/pkg/git"
 	"github.com/user/wakatime-profile-stats/pkg/github"
 	"github.com/user/wakatime-profile-stats/pkg/stats"
@@ -41,29 +42,29 @@ func run() error {
 		zap.L().Debug(fmt.Sprintf(s, i...))
 	}))
 	if err != nil {
-		return fmt.Errorf("setting max procs: %w", err)
+		return err
 	}
 
 	zap.L().Info("Starting Wakatime Profile Stats")
 
 	wakaAPIKey, githubToken, err := retrieveEnvVars()
 	if err != nil {
-		return fmt.Errorf("new function: %w", err)
+		return err
 	}
 
 	repos, repoPath, err := getGithubRepos(githubToken)
 	if err != nil {
-		return fmt.Errorf("getting github user and repos: %w", err)
+		return err
 	}
 
 	sevenDaysStats, monthlyStats, yearlyStats, allTimeStats, err := getWakaStats(wakaAPIKey)
 	if err != nil {
-		return fmt.Errorf("getting wakatime stats: %w", err)
+		return err
 	}
 
 	err = updateReadmeStats(repoPath, sevenDaysStats, monthlyStats, yearlyStats, allTimeStats, repos)
 	if err != nil {
-		return fmt.Errorf("updating readme stats: %w", err)
+		return err
 	}
 
 	zap.L().Info("Wakatime Profile Stats completed successfully")
@@ -74,12 +75,12 @@ func run() error {
 func retrieveEnvVars() (string, string, error) {
 	wakaAPIKey := os.Getenv("INPUT_WAKATIME_API_KEY")
 	if wakaAPIKey == "" {
-		return "", "", fmt.Errorf("GitHub Token is required")
+		return "", "", errors.ErrWakatimeAPIKeyRequired
 	}
 
 	githubToken := os.Getenv("INPUT_GH_TOKEN")
 	if githubToken == "" {
-		return "", "", fmt.Errorf("GitHub Token is required")
+		return "", "", errors.ErrGithubTokenRequired
 	}
 
 	zap.L().Info("Environment variables are present and valid")
@@ -89,17 +90,17 @@ func retrieveEnvVars() (string, string, error) {
 func getGithubRepos(githubToken string) ([]*go_github.Repository, string, error) {
 	gClient, err := github.NewGithubClient(githubToken)
 	if err != nil {
-		return nil, "", fmt.Errorf("new github client: %w", err)
+		return nil, "", err
 	}
 
 	user, err := gClient.GetUser()
 	if err != nil {
-		return nil, "", fmt.Errorf("getting user: %w", err)
+		return nil, "", err
 	}
 
 	repos, err := gClient.GetRepos()
 	if err != nil {
-		return nil, "", fmt.Errorf("getting repos: %w", err)
+		return nil, "", err
 	}
 
 	remoteName := (*user.Login) + "/" + (*user.Login)
@@ -114,22 +115,22 @@ func getWakaStats(wakaAPIKey string) (*wakatime.WakaStats, *wakatime.WakaStats, 
 	wClient := wakatime.NewClient("https://wakatime.com/api/v1", wakaAPIKey)
 	sevenDaysStats, err := wClient.GetStats("last_7_days")
 	if err != nil {
-		return nil, nil, nil, nil, fmt.Errorf("getting stats: %w", err)
+		return nil, nil, nil, nil, err
 	}
 
 	monthlyStats, err := wClient.GetStats("last_30_days")
 	if err != nil {
-		return nil, nil, nil, nil, fmt.Errorf("getting stats: %w", err)
+		return nil, nil, nil, nil, err
 	}
 
 	yearlyStats, err := wClient.GetStats("last_year")
 	if err != nil {
-		return nil, nil, nil, nil, fmt.Errorf("getting stats: %w", err)
+		return nil, nil, nil, nil, err
 	}
 
 	allTimeStats, err := wClient.GetStats("all_time")
 	if err != nil {
-		return nil, nil, nil, nil, fmt.Errorf("getting stats: %w", err)
+		return nil, nil, nil, nil, err
 	}
 
 	zap.L().Info("Got Wakatime stats")
@@ -139,22 +140,22 @@ func getWakaStats(wakaAPIKey string) (*wakatime.WakaStats, *wakatime.WakaStats, 
 func updateReadmeStats(repoPath string, sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakatime.WakaStats, githubRepos []*go_github.Repository) error {
 	g, err := git.SetupRepo(repoPath)
 	if err != nil {
-		return fmt.Errorf("setting up repo: %w", err)
+		return err
 	}
 
 	textStats, err := stats.ProcessStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats, githubRepos)
 	if err != nil {
-		return fmt.Errorf("processing stats: %w", err)
+		return err
 	}
 
 	err = g.UpdateStats(*textStats)
 	if err != nil {
-		return fmt.Errorf("updating stats: %w", err)
+		return err
 	}
 
 	err = g.CommitAndPush()
 	if err != nil {
-		return fmt.Errorf("committing and pushing: %w", err)
+		return err
 	}
 
 	return nil

@@ -6,6 +6,10 @@ import (
 	"github.com/user/wakatime-profile-stats/pkg/wakatime"
 )
 
+const (
+	maxTopItems = 5
+)
+
 func calculateTopProjects(stats *wakatime.WakaStats) []SortedObject {
 	slices.SortFunc(stats.Data.Projects, func(a, b wakatime.Projects) int {
 		return int(b.TotalSeconds - a.TotalSeconds)
@@ -13,7 +17,7 @@ func calculateTopProjects(stats *wakatime.WakaStats) []SortedObject {
 
 	topProjects := make([]SortedObject, 0)
 	for i, project := range stats.Data.Projects {
-		if i == 5 {
+		if i == maxTopItems {
 			break
 		}
 
@@ -23,7 +27,7 @@ func calculateTopProjects(stats *wakatime.WakaStats) []SortedObject {
 		})
 	}
 
-	diff := 5 - len(topProjects)
+	diff := maxTopItems - len(topProjects)
 	if diff > 0 {
 		for i := 0; i < diff; i++ {
 			topProjects = append(topProjects, SortedObject{
@@ -43,7 +47,7 @@ func calculateTopLanguages(stats *wakatime.WakaStats) []SortedObject {
 
 	topLanguages := make([]SortedObject, 0)
 	for i, language := range stats.Data.Languages {
-		if i == 5 {
+		if i == maxTopItems {
 			break
 		}
 
@@ -53,7 +57,7 @@ func calculateTopLanguages(stats *wakatime.WakaStats) []SortedObject {
 		})
 	}
 
-	diff := 5 - len(topLanguages)
+	diff := maxTopItems - len(topLanguages)
 	if diff > 0 {
 		for i := 0; i < diff; i++ {
 			topLanguages = append(topLanguages, SortedObject{

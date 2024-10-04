@@ -2,42 +2,46 @@ package github
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/go-github/v65/github"
+	"github.com/user/wakatime-profile-stats/internal/errors"
 )
 
-type GithubClient struct {
+const (
+	PerPageCount = 10
+)
+
+type Client struct {
 	client *github.Client
 }
 
-func NewGithubClient(authToken string) (*GithubClient, error) {
+func NewGithubClient(authToken string) (*Client, error) {
 	if authToken == "" {
-		return nil, fmt.Errorf("GitHub Token is required")
+		return nil, errors.ErrGithubTokenRequired
 	}
 
-	return &GithubClient{client: github.NewClient(nil).WithAuthToken(authToken)}, nil
+	return &Client{client: github.NewClient(nil).WithAuthToken(authToken)}, nil
 }
 
-func (gh *GithubClient) GetUser() (*github.User, error) {
+func (gh *Client) GetUser() (*github.User, error) {
 	user, _, err := gh.client.Users.Get(context.Background(), "")
 	if err != nil {
-		return nil, fmt.Errorf("getting user: %w", err)
+		return nil, err
 	}
 
 	return user, nil
 }
 
-func (gh *GithubClient) GetRepos() ([]*github.Repository, error) {
+func (gh *Client) GetRepos() ([]*github.Repository, error) {
 	var allRepos []*github.Repository
 	opt := &github.RepositoryListByAuthenticatedUserOptions{
-		ListOptions: github.ListOptions{PerPage: 10},
+		ListOptions: github.ListOptions{PerPage: PerPageCount},
 	}
 
 	for {
 		repos, resp, err := gh.client.Repositories.ListByAuthenticatedUser(context.Background(), opt)
 		if err != nil {
-			return nil, fmt.Errorf("getting repos: %w", err)
+			return nil, err
 		}
 
 		allRepos = append(allRepos, repos...)

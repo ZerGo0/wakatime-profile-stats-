@@ -90,7 +90,7 @@ func (c *Client) Do(req *http.Request) (*http.Response, error) {
 
 		resp, errRetry := c.doFunc(c, req)
 		if errRetry != nil {
-			return nil, fmt.Errorf("retry request failed: %s. original error: %s", errRetry, err)
+			return nil, errRetry
 		}
 
 		return resp, nil

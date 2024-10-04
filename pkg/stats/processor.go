@@ -53,7 +53,6 @@ Yearly:                  ` + codingTimeYearly + `
 All time:                ` + codingTimeAllTime + `
 ` + codeBlockEnd + `
 `
-
 }
 
 func processStats(title string, stats *wakatime.WakaStats, githubRepos []*github.Repository) string {
@@ -78,9 +77,6 @@ func getCombinedStats(sevenDaysStr, monthlyStr, yearlyStr, alltimeStr string) st
 	monthlyLongestLine := getLongestLine(monthlyStr)
 	yearlyLongestLine := getLongestLine(yearlyStr)
 	alltimeLongestLine := getLongestLine(alltimeStr)
-
-	// seven | monthly | yearly | alltime
-	//       | 			   |        |
 
 	combinedStats := ""
 	sevenDaysLines := strings.Split(sevenDaysStr, "\n")

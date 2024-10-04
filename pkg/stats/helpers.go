@@ -35,7 +35,7 @@ projectLoop:
 	}
 
 	// Remove private projects from stats
-	stats.Data.Projects = lo.Filter(stats.Data.Projects, func(p wakatime.Projects, i int) bool {
+	stats.Data.Projects = lo.Filter(stats.Data.Projects, func(p wakatime.Projects, _ int) bool {
 		_, found := lo.Find(privateProjects, func(project string) bool {
 			return project == p.Name
 		})
@@ -51,21 +51,22 @@ projectLoop:
 }
 
 func secondsToHumanReadable(privateWorkProjectsTotal int) string {
-	years := int(privateWorkProjectsTotal / yearInSeconds)
-	months := int((privateWorkProjectsTotal % yearInSeconds) / monthInSeconds)
-	days := int(((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) / dayInSeconds)
-	hours := int((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) / hourInSeconds)
-	minutes := int(((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds)
+	years := privateWorkProjectsTotal / yearInSeconds
+	months := (privateWorkProjectsTotal % yearInSeconds) / monthInSeconds
+	days := ((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) / dayInSeconds
+	hours := (((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) / hourInSeconds
+	minutes := ((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
 
-	if years > 0 {
+	switch {
+	case years > 0:
 		return fmt.Sprintf("%d years %d months %d days %d hrs %d mins", years, months, days, hours, minutes)
-	} else if months > 0 {
+	case months > 0:
 		return fmt.Sprintf("%d months %d days %d hrs %d mins", months, days, hours, minutes)
-	} else if days > 0 {
+	case days > 0:
 		return fmt.Sprintf("%d days %d hrs %d mins", days, hours, minutes)
-	} else if hours > 0 {
+	case hours > 0:
 		return fmt.Sprintf("%d hrs %d mins", hours, minutes)
-	} else {
+	default:
 		return fmt.Sprintf("%d mins", minutes)
 	}
 }
@@ -79,11 +80,11 @@ func formatObjects(objects []SortedObject) string {
 			truncatedObject := object.Name[:maxProjectNameLength-len("...")] + "..."
 			formattedObjects += fmt.Sprintf("%s %s\n", truncatedObject, object.Text)
 			continue
-		} else {
-			spaces := maxProjectNameLength - objectLen
-			formattedObjects += fmt.Sprintf("%s%s%s\n", object.Name, getSpaces(spaces), object.Text)
-			continue
 		}
+
+		spaces := maxProjectNameLength - objectLen
+		formattedObjects += fmt.Sprintf("%s%s%s\n", object.Name, getSpaces(spaces), object.Text)
+		continue
 	}
 
 	return formattedObjects
