@@ -1,0 +1,7 @@
+name: Hello World
+description: Hello World Action
+# inputs:
+# outputs:
+runs:
+  using: docker
+  image: Dockerfile

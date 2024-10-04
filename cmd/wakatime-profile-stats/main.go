@@ -41,6 +41,12 @@ func run() error {
 	}
 
 	zap.L().Info("Hello world!", zap.String("location", "world"))
+	githubActionOutput("hello", "world")
+	githubActionOutput("test", "this is a test")
 
 	return nil
+}
+
+func githubActionOutput(key, value string) {
+	fmt.Printf("::set-output name=%s::%s\n", key, value)
 }
