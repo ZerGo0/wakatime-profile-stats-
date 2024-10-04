@@ -16,7 +16,7 @@ const (
 )
 
 const (
-	localRepoPath = "/app/repo"
+	localRepoPath = "/tmp/repo"
 )
 
 type Git struct {
