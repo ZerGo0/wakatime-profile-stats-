@@ -22,7 +22,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatalf("failed to create logger: %v", err)
+		log.Fatalf("failed to setup logger: %v", err)
 	}
 	zap.ReplaceGlobals(logger)
 
@@ -40,13 +40,17 @@ func run() error {
 		return fmt.Errorf("setting max procs: %w", err)
 	}
 
-	zap.L().Info("Hello world!", zap.String("location", "world"))
+	zap.L().Info("Starting Wakatime Profile Stats")
 
 	wakaAPIKey := os.Getenv("INPUT_WAKATIME_API_KEY")
-	zap.L().Info("Wakatime API Key", zap.String("WAKATIME_API_KEY", wakaAPIKey))
+	if wakaAPIKey == "" {
+		return fmt.Errorf("Wakatime API Key is required")
+	}
 
 	githubToken := os.Getenv("INPUT_GH_TOKEN")
-	zap.L().Info("Github Token", zap.Int("len GITHUB_TOKEN", len(githubToken)))
+	if githubToken == "" {
+		return fmt.Errorf("GitHub Token is required")
+	}
 
 	return nil
 }
