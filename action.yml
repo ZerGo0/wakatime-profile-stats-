@@ -1,5 +1,7 @@
 name: Hello World ZerGo0
 description: Hello World Action
+icon: "activity"
+color: "red"
 # inputs:
 # outputs:
 runs:
