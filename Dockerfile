@@ -30,6 +30,6 @@ COPY --link --from=build /app/main /
 USER 65532:65532
 
 # Allow user to create files in /app
-RUN chmod 777 /app
+RUN ["/busybox/sh", "-c", "chown -R 65532:65532 /app"]
 
 ENTRYPOINT ["/main"]
