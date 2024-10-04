@@ -13,5 +13,5 @@ jobs:
       - name: wakatime-profile-stats
         uses: ZerGo0/wakatime-profile-stats@main
         with:
-          WAKATIME_API_KEY: test
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
