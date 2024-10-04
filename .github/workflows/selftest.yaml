@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Hello World ZerGo0
+      - name: wakatime-profile-stats
         uses: ZerGo0/wakatime-profile-stats@v0.0.1
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
