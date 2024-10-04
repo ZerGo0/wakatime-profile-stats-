@@ -14,9 +14,6 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 # build th application
 FROM base AS build
 
-ENV WAKATIME_API_KEY=${WAKATIME_API_KEY}
-ENV GH_TOKEN=${GH_TOKEN}
-
 # temp mount all files instead of loading into image with COPY
 # temp mount module cache
 # temp mount go build cache
