@@ -51,7 +51,7 @@ func (g *Git) UpdateStats(stats string) error {
 		return fmt.Errorf("repo not setup")
 	}
 
-	readmeBytes, err := os.ReadFile("./tmp/repo/README.md")
+	readmeBytes, err := os.ReadFile(localRepoPath + "/README.md")
 	if err != nil {
 		return fmt.Errorf("reading readme file: %w", err)
 	}
@@ -72,7 +72,7 @@ func (g *Git) UpdateStats(stats string) error {
 
 	newReadme := readme[:startIndex+len(startMarker)] + "\n" + stats + "\n" + readme[endIndex:]
 
-	if err := os.WriteFile("./tmp/repo/README.md", []byte(newReadme), 0644); err != nil {
+	if err := os.WriteFile(localRepoPath+"/README.md", []byte(newReadme), 0644); err != nil {
 		return fmt.Errorf("writing readme file: %w", err)
 	}
 
