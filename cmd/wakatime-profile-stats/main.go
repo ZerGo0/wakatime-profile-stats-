@@ -46,7 +46,7 @@ func run() error {
 	zap.L().Info("Wakatime API Key", zap.String("WAKATIME_API_KEY", wakaAPIKey))
 
 	githubToken := os.Getenv("GITHUB_TOKEN")
-	zap.L().Info("Github Token", zap.String("GITHUB_TOKEN", githubToken))
+	zap.L().Info("Github Token", zap.Int("len GITHUB_TOKEN", len(githubToken)))
 
 	return nil
 }
