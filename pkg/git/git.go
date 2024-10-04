@@ -15,19 +15,23 @@ const (
 	endMarker   = "<!--END_SECTION:waka-->"
 )
 
+const (
+	localRepoPath = "/app/repo"
+)
+
 type Git struct {
 	gitRepo *git.Repository
 	setup   bool
 }
 
 func SetupRepo(repoPath string) (*Git, error) {
-	if _, err := os.Stat("./tmp/repo"); err == nil {
-		if err := os.RemoveAll("./tmp/repo"); err != nil {
+	if _, err := os.Stat(localRepoPath); err == nil {
+		if err := os.RemoveAll(localRepoPath); err != nil {
 			return nil, fmt.Errorf("removing repo: %w", err)
 		}
 	}
 
-	repo, err := git.PlainClone("./tmp/repo", false, &git.CloneOptions{
+	repo, err := git.PlainClone(localRepoPath, false, &git.CloneOptions{
 		URL: repoPath,
 	})
 	if err != nil {

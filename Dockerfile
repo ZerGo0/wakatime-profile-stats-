@@ -28,4 +28,8 @@ FROM gcr.io/distroless/static:nonroot@sha256:26f9b99f2463f55f20db19feb4d96eb88b0
 COPY --link --from=build /app/main /
 # this is the numeric version of user nonroot:nonroot to check runAsNonRoot in kubernetes
 USER 65532:65532
+
+# Allow user to create files in /app
+RUN chmod 777 /app
+
 ENTRYPOINT ["/main"]
