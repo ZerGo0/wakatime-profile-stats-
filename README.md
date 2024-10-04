@@ -4,7 +4,7 @@ This GitHub Action will update your README with your coding stats from [Wakatime
 
 ## Example
 
-![Wakatime Stats](https://github.com/ZerGo0/wakatime-profile-stats/assets/preview.png)
+![Wakatime Stats](/assets/preview.png)
 
 ## Setup
 
