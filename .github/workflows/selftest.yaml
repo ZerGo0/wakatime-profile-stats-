@@ -1,0 +1,8 @@
+name: selftest
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    - name: Hello World ZerGo0
+      uses: ZerGo0/wakatime-profile-stats@v0.0.1
