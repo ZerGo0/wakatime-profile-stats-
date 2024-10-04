@@ -1,7 +1,6 @@
 name: Hello World ZerGo0
 description: Hello World Action
-icon: "activity"
-color: "red"
+author: ZerGo0
 # inputs:
 # outputs:
 runs:
