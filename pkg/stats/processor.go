@@ -49,7 +49,7 @@ func processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats 
 ` + codeBlockStart + `
 Last 7 days:             ` + codingTimeSevenDays + `
 Last 30 days:            ` + codingTimeMonthly + `
-Last 365 days:                  ` + codingTimeYearly + `
+Last 365 days:           ` + codingTimeYearly + `
 All time:                ` + codingTimeAllTime + `
 ` + codeBlockEnd + `
 `
