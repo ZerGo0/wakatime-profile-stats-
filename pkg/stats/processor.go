@@ -35,7 +35,7 @@ func ProcessStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakat
 }
 
 func processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakatime.WakaStats) string {
-	if sevenDaysStats == nil && yearlyStats == nil && allTimeStats == nil {
+	if sevenDaysStats == nil && monthlyStats == nil && yearlyStats == nil && allTimeStats == nil {
 		return ""
 	}
 
@@ -43,6 +43,11 @@ func processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats 
 	codingTimeMonthly := monthlyStats.Data.HumanReadableTotalIncludingOtherLanguage
 	codingTimeYearly := yearlyStats.Data.HumanReadableTotalIncludingOtherLanguage
 	codingTimeAllTime := allTimeStats.Data.HumanReadableTotalIncludingOtherLanguage
+
+	// Note: idk how this event happens, but it actually does... (https://github.com/ZerGo0/ZerGo0/commit/d3a9a9c5f4e242bf1997fb56921d3a8483f05bad)
+	if allTimeStats.Data.TotalSecondsIncludingOtherLanguage < yearlyStats.Data.TotalSecondsIncludingOtherLanguage {
+		codingTimeAllTime = yearlyStats.Data.HumanReadableTotalIncludingOtherLanguage
+	}
 
 	return `Code Time:
 
