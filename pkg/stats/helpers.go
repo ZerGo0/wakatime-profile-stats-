@@ -106,6 +106,7 @@ func calculateMaxCodingTime(targetStats *wakatime.WakaStats, prevStats *wakatime
 	if targetStats.Data.TotalSecondsIncludingOtherLanguage <
 		prevStats.Data.TotalSecondsIncludingOtherLanguage {
 		targetCodingTime = prevStats.Data.HumanReadableTotalIncludingOtherLanguage
+		targetStats.Data.TotalSecondsIncludingOtherLanguage = prevStats.Data.TotalSecondsIncludingOtherLanguage
 	}
 
 	return targetCodingTime
