@@ -40,21 +40,9 @@ func processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats 
 	}
 
 	codingTimeSevenDays := sevenDaysStats.Data.HumanReadableTotalIncludingOtherLanguage
-	codingTimeMonthly := monthlyStats.Data.HumanReadableTotalIncludingOtherLanguage
-
-	codingTimeYearly := yearlyStats.Data.HumanReadableTotalIncludingOtherLanguage
-	// Note: idk how this event happens, but it actually does...
-	// (https://github.com/ZerGo0/ZerGo0/commit/d3a9a9c5f4e242bf1997fb56921d3a8483f05bad)
-	if yearlyStats.Data.TotalSecondsIncludingOtherLanguage <
-		monthlyStats.Data.TotalSecondsIncludingOtherLanguage {
-		codingTimeYearly = monthlyStats.Data.HumanReadableTotalIncludingOtherLanguage
-	}
-
-	codingTimeAllTime := allTimeStats.Data.HumanReadableTotalIncludingOtherLanguage
-	if allTimeStats.Data.TotalSecondsIncludingOtherLanguage <
-		yearlyStats.Data.TotalSecondsIncludingOtherLanguage {
-		codingTimeAllTime = yearlyStats.Data.HumanReadableTotalIncludingOtherLanguage
-	}
+	codingTimeMonthly := calculateMaxCodingTime(monthlyStats, sevenDaysStats)
+	codingTimeYearly := calculateMaxCodingTime(yearlyStats, monthlyStats)
+	codingTimeAllTime := calculateMaxCodingTime(allTimeStats, yearlyStats)
 
 	return `Code Time:
 

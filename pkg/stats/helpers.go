@@ -98,3 +98,15 @@ func getSpaces(spaces int) string {
 
 	return s
 }
+
+// Note: idk how this event happens, but it actually does...
+// (https://github.com/ZerGo0/ZerGo0/commit/d3a9a9c5f4e242bf1997fb56921d3a8483f05bad)
+func calculateMaxCodingTime(targetStats *wakatime.WakaStats, prevStats *wakatime.WakaStats) string {
+	codingTimeMonthly := targetStats.Data.HumanReadableTotalIncludingOtherLanguage
+	if targetStats.Data.TotalSecondsIncludingOtherLanguage <
+		prevStats.Data.TotalSecondsIncludingOtherLanguage {
+		codingTimeMonthly = prevStats.Data.HumanReadableTotalIncludingOtherLanguage
+	}
+
+	return codingTimeMonthly
+}
