@@ -54,7 +54,8 @@ func secondsToHumanReadable(privateWorkProjectsTotal int) string {
 //	years := privateWorkProjectsTotal / yearInSeconds
 //	months := (privateWorkProjectsTotal % yearInSeconds) / monthInSeconds
 //	days := ((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) / dayInSeconds
-	hours := (((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) / hourInSeconds
+	// hours := (((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) / hourInSeconds
+	hours := privateWorkProjectsTotal / hourInSeconds
 	minutes := ((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
 
 	switch {
