@@ -58,12 +58,12 @@ func secondsToHumanReadable(privateWorkProjectsTotal int) string {
 	minutes := ((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
 
 	switch {
-	case years > 0:
-		return fmt.Sprintf("%d years %d months %d days %d hrs %d mins", years, months, days, hours, minutes)
-	case months > 0:
-		return fmt.Sprintf("%d months %d days %d hrs %d mins", months, days, hours, minutes)
-	case days > 0:
-		return fmt.Sprintf("%d days %d hrs %d mins", days, hours, minutes)
+//	case years > 0:
+//		return fmt.Sprintf("%d years %d months %d days %d hrs %d mins", years, months, days, hours, minutes)
+//	case months > 0:
+//		return fmt.Sprintf("%d months %d days %d hrs %d mins", months, days, hours, minutes)
+//	case days > 0:
+//		return fmt.Sprintf("%d days %d hrs %d mins", days, hours, minutes)
 	case hours > 0:
 		return fmt.Sprintf("%d hrs %d mins", hours, minutes)
 	default:
