@@ -13,7 +13,7 @@ name: Update Readme with Metrics
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 6 * * *"
   workflow_dispatch:
 jobs:
   update-readme:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: wakatime-profile-stats
-        uses: ZerGo0/wakatime-profile-stats@v1.0.0
+        uses: ZerGo0/wakatime-profile-stats@main
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
