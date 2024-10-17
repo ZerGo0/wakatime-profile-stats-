@@ -24,7 +24,7 @@ func ProcessStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakat
 	stats += processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats)
 	sevenDaysStr := processStats("Last 7 days", sevenDaysStats, githubRepos)
 	monthlyStr := processStats("Last 30 days", monthlyStats, githubRepos)
-	yearlyStr := processStats("Yearly", yearlyStats, githubRepos)
+	yearlyStr := processStats("Last 365 days", yearlyStats, githubRepos)
 	alltimeStr := processStats("All time", allTimeStats, githubRepos)
 	stats += getCombinedStats(sevenDaysStr, monthlyStr, yearlyStr, alltimeStr)
 	stats += "Updated at " + time.Now().Format("2006-01-02 15:04:05") + " (UTC) using [ZerGo0/wakatime-profile-stats](https://github.com/ZerGo0/wakatime-profile-stats)"
