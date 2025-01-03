@@ -1,6 +1,7 @@
 package stats
 
 import (
+	"os"
 	"strings"
 	"time"
 
@@ -35,8 +36,9 @@ func ProcessStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakat
 }
 
 func processCodingStats(sevenDaysStats, monthlyStats, yearlyStats, allTimeStats *wakatime.WakaStats) string {
-	if sevenDaysStats == nil && monthlyStats == nil && yearlyStats == nil && allTimeStats == nil {
-		return ""
+	if sevenDaysStats == nil || monthlyStats == nil || yearlyStats == nil || allTimeStats == nil {
+		zap.L().Warn("Some stats are nil, skipping")
+		os.Exit(0)
 	}
 
 	codingTimeSevenDays := sevenDaysStats.Data.HumanReadableTotalIncludingOtherLanguage
