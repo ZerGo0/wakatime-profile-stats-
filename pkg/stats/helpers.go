@@ -51,20 +51,20 @@ projectLoop:
 }
 
 func secondsToHumanReadable(privateWorkProjectsTotal int) string {
-//	years := privateWorkProjectsTotal / yearInSeconds
-//	months := (privateWorkProjectsTotal % yearInSeconds) / monthInSeconds
-//	days := ((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) / dayInSeconds
+	//	years := privateWorkProjectsTotal / yearInSeconds
+	//	months := (privateWorkProjectsTotal % yearInSeconds) / monthInSeconds
+	//	days := ((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) / dayInSeconds
 	// hours := (((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) / hourInSeconds
 	hours := privateWorkProjectsTotal / hourInSeconds
 	minutes := ((((privateWorkProjectsTotal % yearInSeconds) % monthInSeconds) % dayInSeconds) % hourInSeconds) / minuteInSeconds
 
 	switch {
-//	case years > 0:
-//		return fmt.Sprintf("%d years %d months %d days %d hrs %d mins", years, months, days, hours, minutes)
-//	case months > 0:
-//		return fmt.Sprintf("%d months %d days %d hrs %d mins", months, days, hours, minutes)
-//	case days > 0:
-//		return fmt.Sprintf("%d days %d hrs %d mins", days, hours, minutes)
+	//	case years > 0:
+	//		return fmt.Sprintf("%d years %d months %d days %d hrs %d mins", years, months, days, hours, minutes)
+	//	case months > 0:
+	//		return fmt.Sprintf("%d months %d days %d hrs %d mins", months, days, hours, minutes)
+	//	case days > 0:
+	//		return fmt.Sprintf("%d days %d hrs %d mins", days, hours, minutes)
 	case hours > 0:
 		return fmt.Sprintf("%d hrs %d mins", hours, minutes)
 	default:
